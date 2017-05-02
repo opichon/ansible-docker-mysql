@@ -1,0 +1,2 @@
+mysql_lib_dir: /var/lib/mysql
+mysql_backups_dir: /var/backups/mysql

@@ -1,0 +1,47 @@
+---
+- name: Make sure that the mysql directories exists
+  file:
+    path: "{{ item }}"
+    state: "directory"
+    mode: "0744"
+  with_items:
+    - "{{ mysql_lib_dir }}"
+    - "{{ mysql_backups_dir }}"
+
+- name: Run mysql 5.7 server
+  docker_container:
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+    image: mysql:5.7
+    labels:
+      traefik.enable: "false"
+    name: mysql57
+    networks:
+      - name: "{{ network }}"
+    pull: true
+    recreate: true
+    restart_policy: always
+    state: started
+    volumes:
+      - "{{ mysql_lib_dir }}:/var/lib/mysql"
+      - "{{ mysql_backups_dir }}:/var/backups/mysql"
+
+- name: Run phpmyadmin
+  docker_container:
+    image: phpmyadmin/phpmyadmin:latest
+    name: phpmyadmin
+    env:
+      PMA_ABSOLUTE_URI: "{{ phpmyadmin_absolute_uri }}"
+      PMA_HOSTS: mysql57
+    labels:
+      traefik.backend: phpmyadmin
+      traefik.frontend.rule: "Host:{{ phpmyadmin_host }}"
+      traefik.port: "80"
+    links:
+      - mysql57:mysql57
+    networks:
+      - name: "{{ network }}"
+    pull: true
+    recreate: true
+    restart_policy: always
+    state: started

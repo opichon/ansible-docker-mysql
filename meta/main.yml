@@ -1,0 +1,22 @@
+galaxy_info:
+  author: Olivier Pichon <op@united-asian.com>
+  description: Install mysql and phpmyadmin as docker containers
+  company: United Asian Management Limited
+
+  license: license (MIT)
+
+  min_ansible_version: 1.2
+
+  platforms:
+
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+
+  galaxy_tags:
+    - apt
+
+dependencies: []
