@@ -1,8 +1,8 @@
 # Ansible Role: Install MySQL and phpmyadmin as docker containers
 
-An Ansible role to install MySQl and phpmyadmin as docker containers.
+An Ansible role to install MySQL and phpmyadmin as docker containers.
 
-See also [opichon.mysql-backup](https://github.com/opichon/ansible-mysql-backup) and [opichon.mysql-restore](https://github.com/opichon/ansible-mysql-restore)
+See also [opichon.mysql-backup](https://galaxy.ansible.com/opichon/mysql-backup/)
 
 ## Requirements
 
