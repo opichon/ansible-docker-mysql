@@ -1,14 +1,16 @@
 ---
 - name: Make sure that the mysql directories exists
   file:
+    mode: "0744"
     path: "{{ item }}"
     state: "directory"
-    mode: "0744"
   with_items:
     - "{{ mysql_lib_dir }}"
     - "{{ mysql_backups_dir }}"
 
 - name: Run mysql 5.7 server
+  become: yes
+  become_user: "{{ docker_user }}"
   docker_container:
     env:
       MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
@@ -21,12 +23,14 @@
     pull: true
     recreate: true
     restart_policy: always
-    state: started
+    state: "{{ state }}"
     volumes:
       - "{{ mysql_lib_dir }}:/var/lib/mysql"
       - "{{ mysql_backups_dir }}:/var/backups/mysql"
 
 - name: Run phpmyadmin
+  become: yes
+  become_user: "{{ docker_user }}"
   docker_container:
     image: phpmyadmin/phpmyadmin:latest
     name: phpmyadmin
@@ -44,4 +48,4 @@
     pull: true
     recreate: true
     restart_policy: always
-    state: started
+    state: "{{ state }}"
