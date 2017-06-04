@@ -1,5 +1,6 @@
 ---
 - name: Make sure that the mysql directories exists
+  become: yes
   file:
     path: "{{ item }}"
     state: "directory"
@@ -9,6 +10,8 @@
     - "{{ mysql_backups_dir }}"
 
 - name: Run mysql 5.7 server
+  become: yes
+  become_user: "{{ mysql_user }}"
   docker_container:
     env:
       MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
@@ -17,7 +20,7 @@
       traefik.enable: "false"
     name: mysql57
     networks:
-      - name: "{{ network }}"
+      - name: "{{ mysql_network }}"
     pull: true
     recreate: true
     restart_policy: always
@@ -27,6 +30,8 @@
       - "{{ mysql_backups_dir }}:/var/backups/mysql"
 
 - name: Run phpmyadmin
+  become: yes
+  become_user: "{{ mysql_user }}"
   docker_container:
     image: phpmyadmin/phpmyadmin:latest
     name: phpmyadmin
@@ -40,7 +45,7 @@
     links:
       - mysql57:mysql57
     networks:
-      - name: "{{ network }}"
+      - name: "{{ mysql_network }}"
     pull: true
     recreate: true
     restart_policy: always
