@@ -2,9 +2,9 @@
 - name: Make sure that the mysql directories exists
   become: yes
   file:
+    mode: "0744"
     path: "{{ item }}"
     state: "directory"
-    mode: "0744"
   with_items:
     - "{{ mysql_lib_dir }}"
     - "{{ mysql_backups_dir }}"
@@ -24,7 +24,7 @@
     pull: true
     recreate: true
     restart_policy: always
-    state: started
+    state: "{{ state }}"
     volumes:
       - "{{ mysql_lib_dir }}:/var/lib/mysql"
       - "{{ mysql_backups_dir }}:/var/backups/mysql"
@@ -49,4 +49,4 @@
     pull: true
     recreate: true
     restart_policy: always
-    state: started
+    state: "{{ state }}"
