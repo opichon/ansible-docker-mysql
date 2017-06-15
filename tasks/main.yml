@@ -1,26 +1,4 @@
 ---
-- name: Run mysql 5.7 server
-  become: yes
-  become_user: "{{ mysql_user }}"
-  docker_container:
-    env:
-      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
-    image: mysql:5.7
-    labels:
-      traefik.enable: "false"
-    name: mysql57
-    networks:
-      - name: "{{ mysql_network }}"
-    pull: true
-    recreate: true
-    restart_policy: always
-    state: "{{ state }}"
-    volumes:
-      - "{{ mysql_lib_dir }}:/var/lib/mysql"
-      - "{{ mysql_backups_dir }}:/var/backups/mysql"
-
-
----
 - name: Ensure mysql dirs exist
   become: true
   file:
@@ -34,11 +12,12 @@
 
 - name: Copy mysql config files
   template:
-    src: "{{ item }}"
+    src: "templates/{{ item }}"
     dest: "{{ mysql_conf_dir }}/{{ item }}"
     force: yes
-  with_fileglob:
-    - "templates/*.cnf"
+  with_items:
+    - "character-set.cnf"
+    - "sql-mode.cnf"
 
 - name: Create docker network
   docker_network:
@@ -48,23 +27,18 @@
 - name: Run mysql 5.7 server
   docker_container:
     env:
-      MYSQL_DATABASE: "{{ mysql_database }}"
-      MYSQL_PASSWORD: "{{ mysql_password }}"
       MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
-      MYSQL_USER: "{{ mysql_user }}"
     image: mysql:5.7
     name: "{{ mysql_container_name }}"
-    networks: [
-      {
-        name: "{{ mysql_network }}"
-      }
-    ]
-    pull: true
+    networks:
+      - name: "{{ mysql_network }}"
     ports:
       - "{{ mysql_port }}:3306"
+    pull: true
     recreate: true
     restart_policy: always
     state: "{{ mysql_state }}"
     volumes:
-      - "{{ mysql_lib_dir }}:/var/lib/mysql"
       - "{{ mysql_backups_dir }}:/var/backups/mysql"
+      - "{{ mysql_conf_dir }}:/etc/mysql/conf.d"
+      - "{{ mysql_lib_dir }}:/var/lib/mysql"

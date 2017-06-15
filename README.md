@@ -20,14 +20,12 @@ mysql_character_set: utf8mb4
 mysql_collation: utf8mb4_unicode_520_ci
 mysql_conf_dir: /var/mysql/conf.d
 mysql_container_name: mysql
-mysql_database
 mysql_lib_dir: /var/mysql/lib
 mysql_network: mysql
 mysql_password
 mysql_port: 3306
 mysql_root_password
 mysql_state: started
-mysql_user
 ```
 
 ## Example playbook
@@ -37,11 +35,13 @@ mysql_user
 - hosts: servers
   roles:
   	- opichon.docker-mysql
+  	  mysql_env:
+  	  	MYSQL_DATABASE: mydb
+  	  	MYSQL_USER: me
+  	  	MYSQL_PASSWORD: secret
   	  mysql_database: mydb
   	  mysql_network: default
-  	  mysql_password: secret
   	  mysql_root_password: very_secret
-  	  mysql_user: me
 ```
 
 ## License
