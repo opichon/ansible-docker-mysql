@@ -37,6 +37,11 @@ mysql_user
 - hosts: servers
   roles:
   	- opichon.docker-mysql
+  	  mysql_database: mydb
+  	  mysql_network: default
+  	  mysql_password: secret
+  	  mysql_root_password: very_secret
+  	  mysql_user: me
 ```
 
 ## License
