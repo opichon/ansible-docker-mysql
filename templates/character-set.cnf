@@ -1,0 +1,10 @@
+[client]
+default-character-set = "{{ mysql_character_set }}"
+
+[mysql]
+default-character-set = "{{ mysql_character_set }}"
+
+[mysqld]
+character-set-client-handshake = FALSE
+character-set-server = "{{ mysql_character_set }}"
+collation-server = "{{ mysql_collation }}"

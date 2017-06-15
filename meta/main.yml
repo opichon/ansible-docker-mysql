@@ -1,6 +1,6 @@
 galaxy_info:
   author: Olivier Pichon <op@united-asian.com>
-  description: Install mysql and phpmyadmin as docker containers
+  description: Install mysql as a docker container
   company: United Asian Management Limited
 
   license: license (MIT)
@@ -17,6 +17,6 @@ galaxy_info:
     - all
 
   galaxy_tags:
-    - apt
+    - mysql
 
 dependencies: []

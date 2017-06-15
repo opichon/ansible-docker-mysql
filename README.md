@@ -1,6 +1,6 @@
-# Ansible Role: Install MySQL and phpmyadmin as docker containers
+# opichon.docker-mysql
 
-An Ansible role to install MySQL and phpmyadmin as docker containers.
+An Ansible role to run a MySQL server as a docker container.
 
 See also [opichon.mysql-backup](https://galaxy.ansible.com/opichon/mysql-backup/)
 
@@ -10,19 +10,24 @@ This role requires Ansible 1.2 or higher.
 
 It also requires the Docker engine to run on the target host.
 
-This task assumes that the containers will be running in a bride network.
-
 ## Role variables
 
 Ansible variables are listed below with their default values.
 
 ```
-mysql_lib_dir: /var/lib/mysql
-mysql_backups_dir: /var/backups/mysql
+mysql_backups_dir: /var/mysql/backups
+mysql_character_set: utf8mb4
+mysql_collation: utf8mb4_unicode_520_ci
+mysql_conf_dir: /var/mysql/conf.d
+mysql_container_name: mysql
+mysql_database
+mysql_lib_dir: /var/mysql/lib
+mysql_network: mysql
+mysql_password
+mysql_port: 3306
 mysql_root_password
-network
-phpmyadmin_absolute_uri
-phpmyadmin_host
+mysql_state: started
+mysql_user
 ```
 
 ## Example playbook

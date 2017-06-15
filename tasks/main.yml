@@ -1,14 +1,4 @@
 ---
-- name: Make sure that the mysql directories exists
-  become: yes
-  file:
-    mode: "0744"
-    path: "{{ item }}"
-    state: "directory"
-  with_items:
-    - "{{ mysql_lib_dir }}"
-    - "{{ mysql_backups_dir }}"
-
 - name: Run mysql 5.7 server
   become: yes
   become_user: "{{ mysql_user }}"
@@ -29,24 +19,52 @@
       - "{{ mysql_lib_dir }}:/var/lib/mysql"
       - "{{ mysql_backups_dir }}:/var/backups/mysql"
 
-- name: Run phpmyadmin
-  become: yes
-  become_user: "{{ mysql_user }}"
+
+---
+- name: Ensure mysql dirs exist
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - "{{ mysql_backups_dir }}"
+    - "{{ mysql_conf_dir }}"
+    - "{{ mysql_lib_dir }}"
+
+- name: Copy mysql config files
+  template:
+    src: "{{ item }}"
+    dest: "{{ mysql_conf_dir }}/{{ item }}"
+    force: yes
+  with_fileglob:
+    - "templates/*.cnf"
+
+- name: Create docker network
+  docker_network:
+    name: "{{ mysql_network }}"
+    state: present
+
+- name: Run mysql 5.7 server
   docker_container:
-    image: phpmyadmin/phpmyadmin:latest
-    name: phpmyadmin
     env:
-      PMA_ABSOLUTE_URI: "{{ phpmyadmin_absolute_uri }}"
-      PMA_HOSTS: mysql57
-    labels:
-      traefik.backend: phpmyadmin
-      traefik.frontend.rule: "Host:{{ phpmyadmin_host }}"
-      traefik.port: "80"
-    links:
-      - mysql57:mysql57
-    networks:
-      - name: "{{ mysql_network }}"
+      MYSQL_DATABASE: "{{ mysql_database }}"
+      MYSQL_PASSWORD: "{{ mysql_password }}"
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+      MYSQL_USER: "{{ mysql_user }}"
+    image: mysql:5.7
+    name: "{{ mysql_container_name }}"
+    networks: [
+      {
+        name: "{{ mysql_network }}"
+      }
+    ]
     pull: true
+    ports:
+      - "{{ mysql_port }}:3306"
     recreate: true
     restart_policy: always
-    state: "{{ state }}"
+    state: "{{ mysql_state }}"
+    volumes:
+      - "{{ mysql_lib_dir }}:/var/lib/mysql"
+      - "{{ mysql_backups_dir }}:/var/backups/mysql"

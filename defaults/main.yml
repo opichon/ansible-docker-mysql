@@ -1,5 +1,10 @@
-docker_user: root
-docker_group: root
-
-mysql_lib_dir: /var/lib/mysql
-mysql_backups_dir: /var/backups/mysql
+---
+mysql_backups_dir: /var/mysql/backups
+mysql_character_set: utf8mb4
+mysql_collation: utf8mb4_unicode_520_ci
+mysql_conf_dir: /etc/mysql/conf.d
+mysql_container_name: mysql
+mysql_lib_dir: /var/mysql/lib
+mysql_network: mysql
+mysql_port: 3306
+mysql_state: started
