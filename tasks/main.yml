@@ -30,7 +30,7 @@
       MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
     image: mysql:5.7
     labels:
-      - "traefik.enable=false"
+      traefik.enable: "false"
     name: "{{ mysql_container_name }}"
     networks:
       - name: "{{ mysql_network }}"
