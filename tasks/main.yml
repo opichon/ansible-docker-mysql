@@ -20,13 +20,6 @@
     - "my.cnf"
     - "sql-mode.cnf"
 
-- name: Copy extra config files
-  copy:
-    src: "{{ item }}"
-    dest: "{{ mysql_conf_dir }}/{{ item }}"
-    force: yes
-  loop: "{{ mysql_config_files }}"
-
 - name: Create docker network
   docker_network:
     name: "{{ mysql_network }}"
