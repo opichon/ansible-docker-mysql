@@ -3,6 +3,9 @@ mysql_backups_dir: /var/mysql/backups
 mysql_character_set: utf8mb4
 mysql_collation: utf8mb4_unicode_520_ci
 mysql_conf_dir: /etc/mysql/conf.d
+mysql_config_mysqld:
+  max_connections: 500
+  skip_name_resolve: "true"
 mysql_container_name: mysql
 mysql_env: {}
 mysql_lib_dir: /var/mysql/lib
