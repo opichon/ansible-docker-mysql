@@ -12,7 +12,7 @@
 
 - name: Copy mysql config files
   template:
-    src: "templates/{{ item }}"
+    src: "templates/{{ item }}.j2"
     dest: "{{ mysql_conf_dir }}/{{ item }}"
     force: yes
   with_items:
