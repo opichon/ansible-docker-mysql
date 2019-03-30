@@ -1,4 +1,4 @@
 [mysqld]
-{% for name,value in mysql_config_mysqld.iteritems() %}
+{% for name,value in mysql_config_mysqld.items() %}
 {{ name }} = {{ value }}
 {% endfor %}
